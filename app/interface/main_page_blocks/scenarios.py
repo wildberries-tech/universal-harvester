@@ -235,7 +235,7 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                                         else:
                                             ui.notify(f"Scenario {run_scenario_result[3]} run OK", type="positive")
                                             refresh_history()
-                                    ui.button("Run Scenario", on_click=await run_scenario_decorator).classes("mt-2")
+                                    ui.button("Run Scenario", on_click=run_scenario_decorator).classes("mt-2")
 
 
                         grid.on("selectionChanged", update_scenario_actions)
