@@ -2,6 +2,12 @@
 
 Подключай, собирай, преобразовывай. Долго запрягаем, зато быстро едем.
 
+Подробная документация описана в [Wiki](https://github.com/wildberries-tech/universal-harvester/wiki) проекта.
+
+[Как развернуть](https://github.com/wildberries-tech/universal-harvester/wiki/Deploy-lead%E2%80%90up-start%E2%80%90up)
+
+[Как пользоваться](https://github.com/wildberries-tech/universal-harvester/wiki/How-to-use)
+
 ![img](https://raw.githubusercontent.com/wildberries-tech/universal-harvester/refs/heads/develop/images/title.png)
 
 **Universal Harvester** представляет собой платформу для создания автоматизаций получения и обработки данных, единое окно входа где пользователь или иная система может получить осмысленные и обогащённые данные, необходимые для решения конкретной задачи. Данный инструмент был создан в SOC для решения задач SOC, но при этом является независимым от данных и области деятельности. Главное чтобы был ландшафт данных и осмысленные задачи. Вы можете получать любые данные из широкого спектра возможных источников данных, предобрабатывать, объединять (JOIN) и соединять (UNION [ALL]), что позволяет решить широкий спектр практических задач. 
@@ -48,8 +54,6 @@
 | elastic proxypass (via kibana) | pid hierarchy | Сбор иерархии процессов по выбранному (в данных osquery process events) |
 | elastic                        | pid siblings  | Сбор сиблингов процесса по выбранному (в данных osquery process events) |
 | elastic proxypass (via kibana) | pid siblings  | Сбор сиблингов процесса по выбранному (в данных osquery process events) |
-
-Подробная документация описана в [Wiki](https://github.com/wildberries-tech/universal-harvester/wiki) проекта.
 
 # Authors and acknowledgment
 Denis Strochenko/RWB SOC
