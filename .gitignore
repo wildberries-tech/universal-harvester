@@ -175,7 +175,7 @@ cython_debug/
 .pypirc
 
 # universal harvester
-*.ipynb
+#.ipynb
 .nicegui/
 build.py
 *.pem
