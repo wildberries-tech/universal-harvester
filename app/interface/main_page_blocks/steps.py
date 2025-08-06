@@ -184,13 +184,17 @@ async def draw_steps(interface_container: ui.card, current_state: dict) -> Tuple
 
                     async def update_step_interface():
                         step_container.clear()
-                        # if not selected_step.value:
-                        #     return
-                        # step = next(s for s in all_steps if s["stepname"] == selected_step.value)
+
                         selected_row = (await grid.get_selected_row()) or {}
                         if not selected_row:
                             return
-                        step = next(s for s in visible_steps if s["stepname"] == selected_row["stepname"])
+                        # получаем индекс выбранной строки
+                        for i, visible_step in enumerate(visible_steps):
+                            if selected_row["stepname"] == visible_step["stepname"]:
+                                step = visible_step
+                                current_state["last_selected_step"] = i
+
+                        #step = next(s for s in visible_steps if s["stepname"] == selected_row["stepname"])
                         # Проверка соответствия sourcename и sourcetype
                         source = next((s for s in all_sources if s["sourcename"] == step["sourcename"]), None)
                         if source and source["type"] != step["sourcetype"]:
@@ -331,13 +335,7 @@ async def draw_steps(interface_container: ui.card, current_state: dict) -> Tuple
                                         ui.notify("Step updated successfully!", type="positive")
                                         logger_log(syslog.LOG_INFO, get_log_message("Step updated", currentFuncName(), current_state))
                                         
-                                        # запоминаем исходные параметры, чтобы определить, нужно ли рефрешить страницу
-                                        # страницу не нужно рефрешить, если изменяется только json
-                                        if stepname_input.value == step["stepname"] and sourcename_input.value == step["sourcename"] and sourcetype_input.value == step["sourcetype"] and new_roles == ", ".join(step["roles"]):
-                                            pass
-                                            # зачем обновлять страницу, если поменяется только json, который в таблице не отображается?
-                                        else:
-                                            draw_steps(interface_container, current_state)  # Обновление страницы
+                                        await draw_steps(interface_container, current_state)  # Обновление страницы
 
                                     ui.button("Update Step", on_click=update_step_action).classes("mt-2")
 
@@ -383,7 +381,7 @@ async def draw_steps(interface_container: ui.card, current_state: dict) -> Tuple
                                 else:
                                     ui.notify(f"Step {new_stepname.value} created", type="positive")
                                     logger_log(syslog.LOG_INFO, get_log_message(f"Step {new_stepname.value} created", currentFuncName(), current_state))
-                                    draw_steps(interface_container, current_state)  # Обновление страницы
+                                    await draw_steps(interface_container, current_state)  # Обновление страницы
                             ui.button("Add Step", on_click=add_new_step).classes("mt-2")
 
                         # Копирование шага
@@ -421,11 +419,15 @@ async def draw_steps(interface_container: ui.card, current_state: dict) -> Tuple
                                         else:
                                             ui.notify(f"Step {new_copy_stepname.value} copied", type="positive")
                                             logger_log(syslog.LOG_INFO, get_log_message(f"Step {new_copy_stepname.value} copied", currentFuncName(), current_state))
-                                            draw_steps(interface_container, current_state)  # Обновление страницы
+                                            await draw_steps(interface_container, current_state)  # Обновление страницы
                                     ui.button("Copy Step", on_click=copy_step_action).classes("mt-2")
 
                             #selected_step.on("update:model-value", update_copy_step_interface)
                             grid.on("selectionChanged", update_copy_step_interface)
+                    if "last_selected_step" in current_state:
+                        if current_state["last_selected_step"] > len(visible_steps):
+                            current_state["last_selected_step"] = len(visible_steps)
+                        grid.run_row_method(current_state["last_selected_step"], 'setSelected', True)
 
         return True, "OK", currentFuncName(), None
 

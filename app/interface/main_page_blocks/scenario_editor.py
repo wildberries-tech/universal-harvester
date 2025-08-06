@@ -77,6 +77,8 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                         if not selected_scenario.value:
                             return
                         scenario = next(s for s in all_scenarios if s["scenario_name"] == selected_scenario.value)
+                        # запоминаем последний выбранный
+                        current_state["last_selected_scenario_in_editor"] = scenario["scenario_name"]
                         # Проверка соответствия sourcename и sourcetype
                         
                         with scenario_container:
@@ -147,11 +149,8 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                                         ui.notify("Step updated successfully!", type="positive")
                                         logger_log(syslog.LOG_INFO, get_log_message("Step updated", currentFuncName(), current_state))
 
-                                        if scenario["scenario_name"] == scenario_name_input.value and ", ".join(scenario["roles"]) == roles_input.value:
-                                            pass
-                                        #если имя и роли не поменяличь, то просто сохраняем без рефреша
-                                        else:
-                                            draw_scenario_editor(interface_container, current_state)  # Обновление страницы
+                                        draw_scenario_editor(interface_container, current_state)  # Обновление страницы
+
                                     ui.button("Update Scenario", on_click=update_scenario_action).classes("mt-2")
 
                             selected_scenario.on("update:model-value", update_edit_scenario_interface)
@@ -233,6 +232,16 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                                     ui.button("Copy Scenario", on_click=copy_step_action).classes("mt-2")
 
                             selected_scenario.on("update:model-value", update_copy_step_interface)
+                    # проверяем последний выбранный
+                    if "last_selected_scenario_in_editor" in current_state:
+                        for scnr in all_scenarios:
+                            if scnr["scenario_name"] == current_state["last_selected_scenario_in_editor"]:
+                                selected_scenario.set_value(current_state["last_selected_scenario_in_editor"])
+                                update_scenario_interface()
+                                if has_scenario_editor_admin:
+                                    update_edit_scenario_interface()
+                        
+
 
         return True, "OK", currentFuncName(), None
 

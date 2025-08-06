@@ -285,16 +285,21 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                                     "paginationPageSize": 10,
                                     "domLayout": "normal",
                                 }).classes("w-full h-96").classes(add=current_state["aggrid_theme"])
+                                
+                                # контейнер для кнопок выбранного выполненного сценария
+                                buttons_container = ui.row().classes("w-full mt-4")
 
                                 async def history_grid_click():
+                                    buttons_container.clear()
                                     selected_row = (await history_grid.get_selected_row()) or {}
                                     if not selected_row:
                                         return
                                     history_scenario_id = selected_row["session_id"]
                                     dummy_link = f"{current_state['itself_link']}result/{history_scenario_id}"
-                                    ui.button("Open pretty", on_click=lambda: ui.navigate.to(f"{dummy_link}/pretty", new_tab=True)).classes("mt-2")
-                                    ui.button("Export to CSV", on_click=lambda: ui.navigate.to(f"{dummy_link}/csv", new_tab=True)).classes("mt-2")
-                                    ui.button("Export to XLSX", on_click=lambda: ui.navigate.to(f"{dummy_link}/xlsx", new_tab=True)).classes("mt-2")
+                                    with buttons_container:
+                                        ui.button("Open pretty", on_click=lambda: ui.navigate.to(f"{dummy_link}/pretty", new_tab=True)).classes("mt-2")
+                                        ui.button("Export to CSV", on_click=lambda: ui.navigate.to(f"{dummy_link}/csv", new_tab=True)).classes("mt-2")
+                                        ui.button("Export to XLSX", on_click=lambda: ui.navigate.to(f"{dummy_link}/xlsx", new_tab=True)).classes("mt-2")
                                     
 
                                 history_grid.on("selectionChanged", history_grid_click)
