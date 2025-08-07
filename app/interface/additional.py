@@ -329,7 +329,7 @@ async def create_fullscreen_scenario_result_page(session_id: str, output_type: s
                         async def open_fullscreen(task_id: str):
                             await create_fullscreen_result_page(task_id, current_state)
                             ui.navigate.to(f'/task_fullscreen_result/{task_id}', new_tab=True)
-                        ui.button("Open fullscreen", on_click=lambda: open_fullscreen(scenario_results[task_name]["id"])).classes("mr-2")
+                        ui.button("Open fullscreen", on_click=partial(open_fullscreen, scenario_results[task_name]["id"])).classes("mr-2")
                         ui.button("Export to CSV", on_click=partial(prepare_export_csv, scenario_results[task_name]["data"], f"task_{task_name.replace(":", "_")}_result.csv")).classes("mr-2")
                         ui.button("Export to XLSX", on_click=partial(prepare_export_xlsx, scenario_results[task_name]["data"], f"task_{task_name.replace(":", "_")}_result.xlsx")).classes("mr-2")
 
