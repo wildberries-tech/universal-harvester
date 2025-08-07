@@ -68,7 +68,7 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                 # Список шагов через ui.select
                 scenario_options = {scenario["scenario_name"]: scenario["scenario_name"] for scenario in all_scenarios}
                 with ui.card().classes("w-full"):
-                    ui.label("Steps List").classes("text-h6")
+                    ui.label("Scenarios list").classes("text-h6")
                     selected_scenario = ui.select(scenario_options, label="Select Scenario", value=None).classes("w-full")
                     scenario_container = ui.column().classes("w-full mt-4")
 
