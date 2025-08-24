@@ -30,7 +30,7 @@ def execute_elasctic_query_via_client(data_map, source, query, step, parameters,
                 ssl_show_warn = source["ssl_show_warn"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:
@@ -94,7 +94,7 @@ def execute_elasctic_aggs_via_client(data_map, source, query, step, parameters, 
                 ssl_show_warn = source["ssl_show_warn"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:
@@ -157,7 +157,7 @@ def execute_function_linux_pid_hierarchy_elastic(data_map, source, query, step, 
                 ssl_show_warn = source["ssl_show_warn"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:
@@ -335,7 +335,7 @@ def execute_function_linux_pid_siblings_elastic(data_map, source, query, step, p
                 ssl_show_warn = source["ssl_show_warn"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []    
     except BaseException as e:

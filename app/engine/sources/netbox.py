@@ -177,7 +177,7 @@ def netbox_finder(target, url, token_netbox, fast_mode):
 def execute_netbox_finder(data_map, source, query, step, parameters, current_state):
     logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
     try:
-        netbox_finder_result = netbox_finder(parameters["target"], f"{source["url"]}", source["key"]["value"], parameters["fast_flag"]) # раньше был source["url"][0]
+        netbox_finder_result = netbox_finder(parameters["target"], f"{source['url']}", source["key"]["value"], parameters["fast_flag"]) # раньше был source["url"][0]
         if netbox_finder_result[0] == False:
                 error_message = f"netbox_finder fail: {netbox_finder_result[1]}"
                 logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))

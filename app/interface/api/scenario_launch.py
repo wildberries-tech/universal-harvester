@@ -64,7 +64,7 @@ def api_scenario_launch_page(client_headers: Dict, scenario_name: str, parameter
         if DEBUG: print("from_db_user", from_db_user)
 
         if from_db_user[0] == False:
-            error_message = f"api login {client_auth_token_dict["username"]} not in db"
+            error_message = f"api login {client_auth_token_dict['username']} not in db"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return False, "auth error", currentFuncName(), {"response_code":401, "buffer":None, "media_type":None, "filename":None}
             #ui.label(error_message).classes("text-h5 text-red-500")
@@ -73,7 +73,7 @@ def api_scenario_launch_page(client_headers: Dict, scenario_name: str, parameter
         # активность УЗ пользователя
         if from_db_user[3][0] == 0:
             # попытка логина из заблокированной УЗ
-            error_message = f"disabled account {client_auth_token_dict["username"]} api login attempt"
+            error_message = f"disabled account {client_auth_token_dict['username']} api login attempt"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return False, "auth error", currentFuncName(), {"response_code":401, "buffer":None, "media_type":None, "filename":None}
             #ui.label(error_message).classes("text-h5 text-red-500")
@@ -89,19 +89,19 @@ def api_scenario_launch_page(client_headers: Dict, scenario_name: str, parameter
             from_db_user_password = from_db_user_password.encode('utf-8')
 
         if not bcrypt.checkpw(client_auth_token_dict["password"].encode('utf-8'), from_db_user_password):
-            error_message = f"unsuccessful api login {client_auth_token_dict["username"]}"
+            error_message = f"unsuccessful api login {client_auth_token_dict['username']}"
             #logger_log(syslog.LOG_DEBUG, get_log_message(error_message, currentFuncName(), current_state))
             return False, "auth error", currentFuncName(), {"response_code":401, "buffer":None, "media_type":None, "filename":None}
             #return
         
-        logger_log(syslog.LOG_DEBUG, get_log_message(f"successful api login {client_auth_token_dict["username"]}", currentFuncName(), current_state))
+        logger_log(syslog.LOG_DEBUG, get_log_message(f"successful api login {client_auth_token_dict['username']}", currentFuncName(), current_state))
         current_state["username"] = client_auth_token_dict["username"]
         ##############################################
         # получаем роли
         ##############################################
         from_db_user_roles = from_db_user[3][3]
         if check_json_correct(from_db_user_roles) == False:
-            error_message = f"incorrect json from_db_user_roles for user {client_auth_token_dict["username"]}"
+            error_message = f"incorrect json from_db_user_roles for user {client_auth_token_dict['username']}"
             #logger_log(syslog.LOG_DEBUG, get_log_message(error_message, currentFuncName(), current_state))
             return False, error_message, currentFuncName(), {"response_code":500, "buffer":None, "media_type":None, "filename":None}
             #return
@@ -184,25 +184,25 @@ def api_scenario_launch_page(client_headers: Dict, scenario_name: str, parameter
         if output_type == "xlsx":
             buffer = scenario_export_to_xlsx(for_table_result)
             media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            filename = f"report_{scenario_session_id.replace(":", "_")}.xlsx"
+            filename = f"report_{scenario_session_id.replace(':', '_')}.xlsx"
             logger_log(syslog.LOG_DEBUG, get_log_message(f"done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), {"response_code":200, "buffer":buffer, "media_type":media_type, "filename":filename}
         if output_type == "csvzip":
             buffer = scenario_export_to_zip_csv(for_table_result)
             media_type = "application/zip"
-            filename = f"report_{scenario_session_id.replace(":", "_")}.csv.zip"
+            filename = f"report_{scenario_session_id.replace(':', '_')}.csv.zip"
             logger_log(syslog.LOG_DEBUG, get_log_message(f"done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), {"response_code":200, "buffer":buffer, "media_type":media_type, "filename":filename}
         if output_type == "jsonzip":
             buffer = scenario_export_to_zip_json(scenarios_data)
             media_type = "application/zip"
-            filename = f"report_{scenario_session_id.replace(":", "_")}.json.zip"
+            filename = f"report_{scenario_session_id.replace(':', '_')}.json.zip"
             logger_log(syslog.LOG_DEBUG, get_log_message(f"done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), {"response_code":200, "buffer":buffer, "media_type":media_type, "filename":filename}
         if output_type == "json":
             buffer = scenario_export_to_raw_json(scenarios_data)
             media_type = "application/json"
-            filename = f"report_{scenario_session_id.replace(":", "_")}.json"
+            filename = f"report_{scenario_session_id.replace(':', '_')}.json"
             logger_log(syslog.LOG_DEBUG, get_log_message(f"done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), {"response_code":200, "buffer":buffer, "media_type":media_type, "filename":filename}
             #return buffer, media_type, filename

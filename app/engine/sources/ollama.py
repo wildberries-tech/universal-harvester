@@ -55,7 +55,7 @@ def execute_ollama_chat_query(data_map, source, query, step, parameters, current
                 headers={
                     'user-agent': f'{current_state["app_name"]}/{current_state["app_version"]}', 
                     'content-type': 'application/json', 
-                    "Authorization": f"Bearer {source["key"]["value"]}"
+                    "Authorization": f"Bearer {source['key']['value']}"
                 },
                 verify=source["verify_certs"], timeout=source["request_timeout"]
             )

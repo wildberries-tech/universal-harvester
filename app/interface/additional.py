@@ -174,11 +174,11 @@ async def create_fullscreen_result_page(task_id: str, current_state: dict):
 
         with ui.column().classes("w-full"):
             ui.label(f"Task id: {task_id}").classes(column_text_class)
-            ui.label(f"Step name: {task["step_name"]}").classes(column_text_class)
-            ui.label(f"Source name: {task["source_name"]}").classes(column_text_class)
-            ui.label(f"Time start: {task["timestamp_start"]}").classes(column_text_class)
-            ui.label(f"Time stop: {task["timestamp_stop"]}").classes(column_text_class)
-            ui.label(f"Scenario id: {task["in_scenario"]}").classes(column_text_class)
+            ui.label(f"Step name: {task['step_name']}").classes(column_text_class)
+            ui.label(f"Source name: {task['source_name']}").classes(column_text_class)
+            ui.label(f"Time start: {task['timestamp_start']}").classes(column_text_class)
+            ui.label(f"Time stop: {task['timestamp_stop']}").classes(column_text_class)
+            ui.label(f"Scenario id: {task['in_scenario']}").classes(column_text_class)
             grid_config = await run.cpu_bound(prepare_aggrid_for_result, result)
             fullscreen_data_aggrid = ui.aggrid(grid_config).classes("w-full h-[calc(100vh-120px)]").classes(add=current_state["aggrid_theme"])
             #fullscreen_data_aggrid.classes(add=current_state["aggrid_theme"])
@@ -265,13 +265,13 @@ async def create_fullscreen_scenario_result_page(session_id: str, output_type: s
     if scenario_data["status_code"] > 1:
         ui.label("Status: scenario is processed yet").classes('text-positive')
     if scenario_data["status_code"] < 0:
-        ui.label(f"Status: scenario was finished with error: {scenario_data["status"]}").classes('text-negative')
+        ui.label(f"Status: scenario was finished with error: {scenario_data['status']}").classes('text-negative')
     # заголовок
-    ui.label(f"Scenario {scenario_data["session_id"]} of user {scenario_data["username"]} was started {scenario_data["timestamp_start"]} with parameters:").classes('text-positive')
+    ui.label(f"Scenario {scenario_data['session_id']} of user {scenario_data['username']} was started {scenario_data['timestamp_start']} with parameters:").classes('text-positive')
     # параметры запуска
     ui.codemirror(value=json.dumps(scenario_data["json"]["parameters"],indent = 4, ensure_ascii=False),language='JSON',line_wrapping=True, theme = current_state["codemirror_theme"]).style('width: 100%; height: auto')#'width: 100%; height: 12rem'
     # описание сценария
-    ui.label(f"Description: {scenario_data["json"]["scenario"]["description"]}")#.classes("text-h5 text-red-500")
+    ui.label(f"Description: {scenario_data['json']['scenario']['description']}")#.classes("text-h5 text-red-500")
     #######################################
     # получаем данные
     #######################################
@@ -292,14 +292,14 @@ async def create_fullscreen_scenario_result_page(session_id: str, output_type: s
         if task_status_code < 0:
             column_text_class = "text-negative"
         with ui.row():
-            ui.label(f"Task id: {scenario_results[task_name]["id"]}").classes(column_text_class)
-            ui.label(f"Description: {scenario_results[task_name]["description"]}").classes(column_text_class)
-            ui.label(f"Step name: {scenario_results[task_name]["step_name"]}").classes(column_text_class)
-            ui.label(f"Data name: {scenario_results[task_name]["data_name"]}").classes(column_text_class)
+            ui.label(f"Task id: {scenario_results[task_name]['id']}").classes(column_text_class)
+            ui.label(f"Description: {scenario_results[task_name]['description']}").classes(column_text_class)
+            ui.label(f"Step name: {scenario_results[task_name]['step_name']}").classes(column_text_class)
+            ui.label(f"Data name: {scenario_results[task_name]['data_name']}").classes(column_text_class)
         with ui.row():
-            ui.label(f"Source name: {scenario_results[task_name]["source_name"]}").classes(column_text_class)
-            ui.label(f"Time start: {scenario_results[task_name]["timestamp_start"]}").classes(column_text_class)
-            ui.label(f"Time stop: {scenario_results[task_name]["timestamp_stop"]}").classes(column_text_class)
+            ui.label(f"Source name: {scenario_results[task_name]['source_name']}").classes(column_text_class)
+            ui.label(f"Time start: {scenario_results[task_name]['timestamp_start']}").classes(column_text_class)
+            ui.label(f"Time stop: {scenario_results[task_name]['timestamp_stop']}").classes(column_text_class)
             time_difference = datetime.datetime.fromisoformat(scenario_results[task_name]["timestamp_stop"]) - datetime.datetime.fromisoformat(scenario_results[task_name]["timestamp_start"])
             ui.label(f"Execution: {time_difference.total_seconds()}").classes(column_text_class)
 
@@ -330,24 +330,24 @@ async def create_fullscreen_scenario_result_page(session_id: str, output_type: s
                             await create_fullscreen_result_page(task_id, current_state)
                             ui.navigate.to(f'/task_fullscreen_result/{task_id}', new_tab=True)
                         ui.button("Open fullscreen", on_click=partial(open_fullscreen, scenario_results[task_name]["id"])).classes("mr-2")
-                        ui.button("Export to CSV", on_click=partial(prepare_export_csv, scenario_results[task_name]["data"], f"task_{task_name.replace(":", "_")}_result.csv")).classes("mr-2")
-                        ui.button("Export to XLSX", on_click=partial(prepare_export_xlsx, scenario_results[task_name]["data"], f"task_{task_name.replace(":", "_")}_result.xlsx")).classes("mr-2")
+                        ui.button("Export to CSV", on_click=partial(prepare_export_csv, scenario_results[task_name]["data"], f"task_{task_name.replace(':', '_')}_result.csv")).classes("mr-2")
+                        ui.button("Export to XLSX", on_click=partial(prepare_export_xlsx, scenario_results[task_name]["data"], f"task_{task_name.replace(':', '_')}_result.xlsx")).classes("mr-2")
 
     if output_type == "xlsx":
         buffer = await run.cpu_bound(scenario_export_to_xlsx, for_table_result)
-        filename = f"report_{session_id.replace(":", "_")}.xlsx"
+        filename = f"report_{session_id.replace(':', '_')}.xlsx"
         ui.download(buffer.getvalue(), filename)
     if output_type == "csv":
         buffer = await run.cpu_bound(scenario_export_to_zip_csv, for_table_result)
-        filename = f"report_{session_id.replace(":", "_")}.csv.zip"
+        filename = f"report_{session_id.replace(':', '_')}.csv.zip"
         ui.download(buffer.getvalue(), filename)
     if output_type == "jsonzip":
         buffer = await run.cpu_bound(scenario_export_to_zip_json, for_table_result)
-        filename = f"report_{session_id.replace(":", "_")}.json.zip"
+        filename = f"report_{session_id.replace(':', '_')}.json.zip"
         ui.download(buffer.getvalue(), filename)
     if output_type == "json":
         buffer = await run.cpu_bound(scenario_export_to_raw_json, for_table_result)
-        filename = f"report_{session_id.replace(":", "_")}.json"
+        filename = f"report_{session_id.replace(':', '_')}.json"
         ui.download(buffer.getvalue(), filename)
 
 def mermaid_variable_cleaner(var: str):
@@ -444,13 +444,13 @@ def get_mermaid_content_for_steps(steps_list: List, scenario: dict, current_stat
         ####################################
         get_step_dependency_result = get_step_dependency(step_json, current_source, step_json["query"], current_state)
         if get_step_dependency_result[0] == False:
-            error_message = f"Ошибка получения списка зависимостей шага {step["step_name"]}: {get_step_dependency_result[1]}"
+            error_message = f"Ошибка получения списка зависимостей шага {step['step_name']}: {get_step_dependency_result[1]}"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(),current_state))
             return False, error_message, currentFuncName(), ""
             
         dependency = get_step_dependency_result[3] # тут используется step_scenario_name
         
-        current_step_name = f"{i}:{step["step_name"]}"
+        current_step_name = f"{i}:{step['step_name']}"
         steps_map[current_step_name] = {}
         steps_map[current_step_name]["dependency"] = dependency
         steps_map[current_step_name]["source_name"] = step_source_name
@@ -461,7 +461,7 @@ def get_mermaid_content_for_steps(steps_list: List, scenario: dict, current_stat
 
     data_name_to_step_name_map = {}
     for i, step in enumerate(steps_list):
-        current_step_name = f"{i}:{step["step_name"]}"
+        current_step_name = f"{i}:{step['step_name']}"
         data_name_to_step_name_map[step["data_name"]] = current_step_name
 
 #     """ ---

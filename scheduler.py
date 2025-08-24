@@ -106,7 +106,7 @@ def scheduler_launch(job, scenario_name, parameters, current_state):
     
     if found_flag == False:
         # + scheduler_history
-        message = f"Job {job["job_name"]} {currentTimestamp()} done, data is not found"
+        message = f"Job {job['job_name']} {currentTimestamp()} done, data is not found"
         logger_log(syslog.LOG_NOTICE, get_log_message(message, currentFuncName(), current_state))
         return
     ##############################################

@@ -232,7 +232,7 @@ def fetch_scenarios_history(has_scenarios_admin: bool, current_state: Dict) -> T
         ##################################
         for line in history_list:
             if check_json_correct(line["json"]) == False:
-                error_message = f"json in scenario history line {line["session_id"]} is incorrect"
+                error_message = f"json in scenario history line {line['session_id']} is incorrect"
                 logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
                 return False, error_message, currentFuncName(), []
             else:

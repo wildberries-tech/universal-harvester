@@ -38,7 +38,7 @@ def write_step_to_storage(data, current_state):
             return False, error_message, currentFuncName(), None
     # поддиректория существует, можно туда писать
     try:
-        output_file_name = f"{current_state["storage_path"]}{STEP_SUBDIR}/{current_state["target_id"]}.pickle.xz"
+        output_file_name = f"{current_state['storage_path']}{STEP_SUBDIR}/{current_state['target_id']}.pickle.xz"
         with lzma.open(output_file_name, 'wb') as handle:
             #pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
             json_string = json.dumps(data)
@@ -46,7 +46,7 @@ def write_step_to_storage(data, current_state):
             handle.write(json_bytes)
 
         # sync
-        os.system(f"sync {current_state["storage_path"]}{STEP_SUBDIR}")
+        os.system(f"sync {current_state['storage_path']}{STEP_SUBDIR}")
     except BaseException as e:
         error_message = f"write error: {str(e)}"
         logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
@@ -99,11 +99,11 @@ def read_step_from_storage(data, current_state):
         logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
         return False, error_message, currentFuncName(), None
     
-    input_file_name = f"{current_state["storage_path"]}{STEP_SUBDIR}/{data["target_id"]}.pickle.xz"
+    input_file_name = f"{current_state['storage_path']}{STEP_SUBDIR}/{data['target_id']}.pickle.xz"
     # поддиректория существует, можно оттуда читать
 
     try:
-        input_file_name = f"{current_state["storage_path"]}{STEP_SUBDIR}/{data["target_id"]}.pickle.xz"
+        input_file_name = f"{current_state['storage_path']}{STEP_SUBDIR}/{data['target_id']}.pickle.xz"
 
         # проверям существование файла, возможна долгая дозапись
         # sync

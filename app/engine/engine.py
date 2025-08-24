@@ -743,7 +743,7 @@ def engine_hasshin(data, current_state):
         engine_pid = os.spawnl(os.P_NOWAIT, sys.executable, sys.executable, f'{current_state["engine_path"]}',f'--shared_memory_name={create_shared_memory_block_result[3]}')
         #engine_pid = os.spawnl(os.P_NOWAIT, f'{current_state["engine_path"]}', f'{current_state["engine_path"]}', f'-s',f'{create_shared_memory_block_result[3]}')
     except BaseException as e:
-        error_message = f"Start engine for task {data["id"]} error: {str(e)}"
+        error_message = f"Start engine for task {data['id']} error: {str(e)}"
         logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
         # неуданый запуск, мы должны обновить таску в БД и поставить статус ошибки
         # обновляем таску, ставим статус -1:"Движок не был запущен, задача остановлена",# текст ошибки
@@ -768,7 +768,7 @@ def engine_hasshin(data, current_state):
     if db_upsert_task_result[0] == False:
         return False, db_upsert_task_result[1], db_upsert_task_result[2], None
 
-    return True, f"id:{data["id"]} pid:{engine_pid}", currentFuncName(), None
+    return True, f"id:{data['id']} pid:{engine_pid}", currentFuncName(), None
 
 def get_key(key_node: Dict, current_state: Dict):
     if isinstance(key_node, Dict):
@@ -1019,7 +1019,7 @@ def process_parameters_generation(apply_node: dict, generator_node, parameters, 
                 
                 # проверяем наличие основного поля времени в блоке параметров или apply
                 if generated_parameter["timestamp_field"] not in parameters:
-                    error_message = f"there is not timestamp_field {generated_parameter["timestamp_field"]} in parameters"
+                    error_message = f"there is not timestamp_field {generated_parameter['timestamp_field']} in parameters"
                     logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
                     return False, error_message, currentFuncName(), {}
                 else:
@@ -1086,7 +1086,7 @@ def process_parameters_generation(apply_node: dict, generator_node, parameters, 
                 
                 # проверяем наличие основного поля времени в блоке параметров или apply
                 if generated_parameter["timestamp_field"] not in parameters:
-                    error_message = f"there is not timestamp_field {generated_parameter["timestamp_field"]} in parameters"
+                    error_message = f"there is not timestamp_field {generated_parameter['timestamp_field']} in parameters"
                     logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
                     return False, error_message, currentFuncName(), {}
                 else:

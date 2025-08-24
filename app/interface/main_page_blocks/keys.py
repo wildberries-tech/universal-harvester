@@ -45,7 +45,7 @@ async def draw_keys(interface_container: ui.card, current_state: dict) -> Tuple[
         if not keys_success:
             logger_log(syslog.LOG_ERR, get_log_message(keys_msg, currentFuncName(), current_state))
             return False, keys_msg, currentFuncName(), None
-        key_list = [f"{key["system"]}&{key["account"]}" for key in all_keys]
+        key_list = [f"{key['system']}&{key['account']}" for key in all_keys]
         with interface_container:
             # Основной контейнер с ограниченной шириной
             with ui.column().classes("w-full"):

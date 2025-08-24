@@ -167,7 +167,7 @@ def execute_youtrack_all_project_issue_finder(data_map, source, query, step, par
         #     )
         response = requests.get(
                 #idReadable,project,description,summary,created,reporter,updated,updater,resolved
-                f"{url}/api/issues?fields={fields_list_to_youtrack_fields(fields,",")}&top={top}&flatten=true&query=\"{target}\"",
+                f"{url}/api/issues?fields={fields_list_to_youtrack_fields(fields,',')}&top={top}&flatten=true&query=\"{target}\"",
                 headers=headers, timeout=timeout
             )
         if response.status_code != 200:
@@ -180,7 +180,7 @@ def execute_youtrack_all_project_issue_finder(data_map, source, query, step, par
         if isinstance(raw_data, list):
             for line in raw_data:
                 if "idReadable" in line:
-                    line["link"] = f"{url}/issue/{line["idReadable"]}/"
+                    line["link"] = f"{url}/issue/{line['idReadable']}/"
                 else:
                     line["link"] = f"?"
         elif isinstance(raw_data, dict):
@@ -218,12 +218,12 @@ def execute_youtrack_all_articles_finder(data_map, source, query, step, paramete
 
         if with_content_flag == True:
             response = requests.get(
-                f"{url}/api/articles?$top={top}&fields={fields_list_to_youtrack_fields(fields_with_content,",")}&query={{\"{target}\"}}",
+                f"{url}/api/articles?$top={top}&fields={fields_list_to_youtrack_fields(fields_with_content,',')}&query={{\"{target}\"}}",
                 headers=headers, timeout=timeout
             )
         else:
             response = requests.get(
-                f"{url}/api/articles?$top={top}&fields={fields_list_to_youtrack_fields(fields,",")}&query={{\"{target}\"}}",
+                f"{url}/api/articles?$top={top}&fields={fields_list_to_youtrack_fields(fields,',')}&query={{\"{target}\"}}",
                 headers=headers, timeout=timeout
             )
 
@@ -238,7 +238,7 @@ def execute_youtrack_all_articles_finder(data_map, source, query, step, paramete
         if isinstance(raw_data, list):
             for line in raw_data:
                 if "idReadable" in line:
-                    line["link"] = f"{url}/articles/{line["idReadable"]}/"
+                    line["link"] = f"{url}/articles/{line['idReadable']}/"
                 else:
                     line["link"] = f"?"
         elif isinstance(raw_data, dict):

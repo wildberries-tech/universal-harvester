@@ -70,7 +70,7 @@ def execute_duckdb(data_map, source, query, step, parameters, current_state):
         # представление данных в duckdb (view или table)
         data_representation_type = query["type"]
         if data_representation_type not in ["view", "table"]:
-            error_message = f"unknown duckdb data_representation_type: {query["type"]}"
+            error_message = f"unknown duckdb data_representation_type: {query['type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []
         

@@ -273,10 +273,10 @@ def client_auth_token_test(client_auth_token_dict: dict, current_state: dict) ->
     # тестируем секрет 
     ###############################################
     if client_auth_token_dict["key"] == decrypted_db_key:
-        logger_log(syslog.LOG_DEBUG, get_log_message(f"successful api login {client_auth_token_dict["system"]}:{client_auth_token_dict["account"]}", currentFuncName(), current_state))
+        logger_log(syslog.LOG_DEBUG, get_log_message(f"successful api login {client_auth_token_dict['system']}:{client_auth_token_dict['account']}", currentFuncName(), current_state))
         return True, "OK", currentFuncName(), current_state
     else:
-        error_message = f"unsuccessful api login {client_auth_token_dict["system"]}:{client_auth_token_dict["account"]}"
+        error_message = f"unsuccessful api login {client_auth_token_dict['system']}:{client_auth_token_dict['account']}"
         logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
         return False, error_message, currentFuncName(), current_state
     

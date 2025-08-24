@@ -17,7 +17,7 @@ def execute_mssql(data_map, source, query, step, parameters, current_state):
                 timeout=query["timeout"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:
