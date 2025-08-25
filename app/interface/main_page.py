@@ -73,9 +73,9 @@ def main_page(keycloak_openid, current_state):
         pass
 
     with ui.footer().classes("h-6 p-1"):
-        user_status_label = ui.label(f"USER: {current_state["username"]}").classes('panel-item')
-        ip_label = ui.label(f"IP: {current_state["client_ip_address"]}").classes('panel-item')
-        port_label = ui.label(f"PORT: {current_state["client_port"]}").classes('panel-item')
-        app_session_label = ui.label(f"APP SESSION: {current_state["main_session_id"]}").classes('panel-item')
-        user_session_label = ui.label(f"USER SESSION: {current_state["user_session_id"]}").classes('panel-item')
+        user_status_label = ui.label(f"USER: {current_state['username']}").classes('panel-item')
+        ip_label = ui.label(f"IP: {current_state['client_ip_address']}").classes('panel-item')
+        port_label = ui.label(f"PORT: {current_state['client_port']}").classes('panel-item')
+        app_session_label = ui.label(f"APP SESSION: {current_state['main_session_id']}").classes('panel-item')
+        user_session_label = ui.label(f"USER SESSION: {current_state['user_session_id']}").classes('panel-item')
         

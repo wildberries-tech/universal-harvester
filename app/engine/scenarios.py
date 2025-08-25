@@ -61,7 +61,7 @@ def get_parameters_from_scenario(scenario_text: str, current_state: dict) -> Tup
                 step_found = True
                 break
         if step_found == False:
-            error_message = f"scenario step {scenario_step["step_name"]} is not found in db"
+            error_message = f"scenario step {scenario_step['step_name']} is not found in db"
             logger_log(syslog.LOG_ERR, get_log_message(f"fail: {error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), {}
         
@@ -73,7 +73,7 @@ def get_parameters_from_scenario(scenario_text: str, current_state: dict) -> Tup
     for i, step in enumerate(found_steps):
         get_parameters_from_step_result = get_parameters_from_step("simple", step["step_name"], step["step_json"], scenario, i, current_state)
         if get_parameters_from_step_result[0] == False:
-            error_message = f"get_parameters_from_step_result is False for step {step["step_name"]}"
+            error_message = f"get_parameters_from_step_result is False for step {step['step_name']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"fail: {error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), {}
         steps_parameters[i] = get_parameters_from_step_result[3]
@@ -156,7 +156,7 @@ def run_scenario(user_roles: List, scenario_name: str, scenario_json, scenario_p
     for i, step in enumerate(scenario["steps"]):
         fetch_step_by_name_result = fetch_step_by_name(step["step_name"], current_state)
         if fetch_step_by_name_result[0] == False:
-            error_message = f"fetch_step_by_name_result for step {i}:{step["step_name"]} is False: {fetch_step_by_name_result[1]}"
+            error_message = f"fetch_step_by_name_result for step {i}:{step['step_name']} is False: {fetch_step_by_name_result[1]}"
             logger_log(syslog.LOG_ERR, get_log_message(f"fail: {error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), "None"
         # steps_data_roles_list.append(fetch_step_by_name_result[3]["roles"])
@@ -264,7 +264,7 @@ def run_scenario(user_roles: List, scenario_name: str, scenario_json, scenario_p
         engine_hasshin_result = engine_hasshin(data,current_state)
 
         if engine_hasshin_result[0] == False:
-            error_message = f"Step start execution error: {engine_hasshin_result[1]} for task {step["current_task_id"]} in scenario {scenario_launch_id}"
+            error_message = f"Step start execution error: {engine_hasshin_result[1]} for task {step['current_task_id']} in scenario {scenario_launch_id}"
             logger_log(syslog.LOG_ERR, get_log_message(f"fail: {error_message}", currentFuncName(), current_state))
             tasks_starting_status.append(False)
         tasks_starting_status.append(True)
@@ -309,7 +309,7 @@ def waiting_for_scenario_execution(iterations_limit: int, scenario_session_id: s
         current_status_code = scenario_execution_dict["status_code"]
 
         if current_status_code < 0:
-            error_message = f"scenario execution error: {scenario_execution_dict["status"]}"
+            error_message = f"scenario execution error: {scenario_execution_dict['status']}"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return False, error_message, currentFuncName(), None
         
@@ -331,7 +331,7 @@ def get_scenarios_data_from_storage(scenario_execution_dict: Dict, current_state
     scenario_data_dict = {}
 
     for i, step in enumerate(scenario_execution_dict["json"]["scenario"]["steps"]):
-        step_data_name = f"{i}_{step["step_name"]}"
+        step_data_name = f"{i}_{step['step_name']}"
         data_data_name = step["data_name"]
         if step["show"] == True:
             scenario_data_dict[step_data_name] = {}
@@ -371,7 +371,7 @@ def get_scenarios_data_from_storage(scenario_execution_dict: Dict, current_state
                     if task_by_id_data["status_code"] > 1:
                         scenario_data_dict[step_data_name]["status"] = "task is processed yet"
                     if task_by_id_data["status_code"] < 0:
-                        scenario_data_dict[step_data_name]["status"] = f"task was finished with error: {task_by_id_data["status"]}"
+                        scenario_data_dict[step_data_name]["status"] = f"task was finished with error: {task_by_id_data['status']}"
 
                 # выводим описание таски
                 scenario_data_dict[step_data_name]["description"] = step["description"]

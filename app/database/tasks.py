@@ -76,7 +76,7 @@ def db_upsert_task(data, current_state):
         return False, str(e), currentFuncName(), None
 
 def db_get_tasks(data, current_state):
-    query = f"SELECT id, pid, status_code, status, step_name, source_name, username, timestamp_start, timestamp_stop, in_scenario, result_rows_count FROM tasks ORDER BY timestamp_start DESC LIMIT {data["limit"]};"
+    query = f"SELECT id, pid, status_code, status, step_name, source_name, username, timestamp_start, timestamp_stop, in_scenario, result_rows_count FROM tasks ORDER BY timestamp_start DESC LIMIT {data['limit']};"
     
     logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
     try:
@@ -107,7 +107,7 @@ def db_get_tasks(data, current_state):
         return False, str(e), currentFuncName(), None
 
 def db_get_unscenario_tasks(data, current_state):
-    query = f"SELECT id, stepname, timestamp_start, timestamp_stop, in_scenario FROM tasks WHERE in_scenario LIKE 'Null' AND username LIKE ? AND stepname LIKE ? AND status_code=5 ORDER BY timestamp_start DESC LIMIT {data["limit"]};"
+    query = f"SELECT id, stepname, timestamp_start, timestamp_stop, in_scenario FROM tasks WHERE in_scenario LIKE 'Null' AND username LIKE ? AND stepname LIKE ? AND status_code=5 ORDER BY timestamp_start DESC LIMIT {data['limit']};"
     
     logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
     try:
@@ -119,7 +119,7 @@ def db_get_unscenario_tasks(data, current_state):
 
         connection = create_db_connection_result[3]
 
-        query = f"SELECT id, stepname, timestamp_start, timestamp_stop, in_scenario FROM tasks WHERE in_scenario LIKE 'Null' AND username LIKE %(inputter)s AND stepname LIKE %(inputter)s AND status_code=5 ORDER BY timestamp_start DESC LIMIT {data["limit"]};"
+        query = f"SELECT id, stepname, timestamp_start, timestamp_stop, in_scenario FROM tasks WHERE in_scenario LIKE 'Null' AND username LIKE %(inputter)s AND stepname LIKE %(inputter)s AND status_code=5 ORDER BY timestamp_start DESC LIMIT {data['limit']};"
         db_inputter_modificator = {"inputter": create_db_connection_result[1]}
         query = query % db_inputter_modificator
 
@@ -206,7 +206,7 @@ def db_get_tasks_by_scenario_id(data, current_state):
             logger_log(syslog.LOG_DEBUG, get_log_message("done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), result
         else:
-            error_message = f"tasks by scenario id {data["in_scenario"]} not found"
+            error_message = f"tasks by scenario id {data['in_scenario']} not found"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return True, error_message, currentFuncName(), []
     except BaseException as e:

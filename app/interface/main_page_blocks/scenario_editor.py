@@ -205,7 +205,7 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                                     return
                                 scenario = next(s for s in all_scenarios if s["scenario_name"] == selected_scenario.value)
                                 with copy_step_container:
-                                    new_copy_scenario_name = ui.input("New Scenario name", value=f"{scenario["scenario_name"]}_copy").classes("w-full")
+                                    new_copy_scenario_name = ui.input("New Scenario name", value=f"{scenario['scenario_name']}_copy").classes("w-full")
                                     async def copy_step_action():
                                         data = {
                                             "scenario_new_name": new_copy_scenario_name.value,
@@ -225,8 +225,8 @@ def draw_scenario_editor(interface_container: ui.card, current_state: dict) -> T
                                             ui.notify(error_message, type="negative")
                                             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
                                         else:
-                                            ui.notify(f"Scenario {new_scenario_name.value} copied from {scenario["scenario_name"]}", type="positive")
-                                            logger_log(syslog.LOG_INFO, get_log_message(f"Scenario {new_scenario_name.value} copied from {scenario["scenario_name"]}", currentFuncName(), current_state))
+                                            ui.notify(f"Scenario {new_scenario_name.value} copied from {scenario['scenario_name']}", type="positive")
+                                            logger_log(syslog.LOG_INFO, get_log_message(f"Scenario {new_scenario_name.value} copied from {scenario['scenario_name']}", currentFuncName(), current_state))
                                             draw_scenario_editor(interface_container, current_state)  # Обновление страницы
 
                                     ui.button("Copy Scenario", on_click=copy_step_action).classes("mt-2")

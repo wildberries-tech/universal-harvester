@@ -32,7 +32,7 @@ def db_get_user(data, current_state):
             logger_log(syslog.LOG_DEBUG, get_log_message("done", currentFuncName(), current_state))
             return True, "OK", currentFuncName(), result
         else:
-            error_message = f"username {data["username"]} not found"
+            error_message = f"username {data['username']} not found"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return False, error_message, currentFuncName(), None
     except BaseException as e:

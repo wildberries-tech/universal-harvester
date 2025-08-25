@@ -107,7 +107,7 @@ def create_db_connection(current_state: Dict):
             query_parameter_inputter = "%s"
             return True, query_parameter_inputter, currentFuncName(), connection
         else:
-            error_message = f"unsupported db type {db_conf["type"]}"
+            error_message = f"unsupported db type {db_conf['type']}"
             logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
             return False, error_message, currentFuncName(), None
     except BaseException as e:

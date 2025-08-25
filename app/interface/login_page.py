@@ -47,7 +47,7 @@ async def login_page(current_state):
             if current_state["keycloak_flag"]:
                 try:
                     #auth_url = await current_state["keycloak_openid"].a_auth_url(redirect_uri=f"{current_state["itself_link"]}login/callback")
-                    auth_url = current_state["keycloak_openid"].auth_url(redirect_uri=f"{current_state["itself_link"]}login/callback")
+                    auth_url = current_state["keycloak_openid"].auth_url(redirect_uri=f"{current_state['itself_link']}login/callback")
                     ui.button('LOGIN VIA KEYCLOAK', on_click=lambda: ui.navigate.to(auth_url)).tooltip("Keycloak auth")
                 except BaseException as e:
                     ui.label("keycloak error")
@@ -56,8 +56,8 @@ async def login_page(current_state):
     with ui.element('div').classes('bottom-panel'):
         with ui.element('div').classes('left-items'):
             user_status_label = ui.label('USER: NOT AUTHORIZED').classes('panel-item')
-            ip_label = ui.label(f"IP: {current_state["client_ip_address"]}").classes('panel-item')
-            port_label = ui.label(f"PORT: {current_state["client_port"]}").classes('panel-item')
+            ip_label = ui.label(f"IP: {current_state['client_ip_address']}").classes('panel-item')
+            port_label = ui.label(f"PORT: {current_state['client_port']}").classes('panel-item')
             app_session_label = ui.label(f"APP SESSION: {current_state['main_session_id']}").classes('panel-item')
             user_session_label = ui.label('USER SESSION: NONE').classes('panel-item')
         #clock_label = ui.label('SYSTEM TIME: INITIALIZING...').classes('panel-item')

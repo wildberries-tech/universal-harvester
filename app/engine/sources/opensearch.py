@@ -22,7 +22,7 @@ def execute_opensearch_query(data_map, source, query, step, parameters, current_
                 max_retries=source["max_retries"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:
@@ -76,7 +76,7 @@ def execute_opensearch_aggs(data_map, source, query, step, parameters, current_s
                 max_retries=source["max_retries"]
             )
         else:
-            error_message = f"unknown source auth_type {source["auth_type"]}"
+            error_message = f"unknown source auth_type {source['auth_type']}"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), []        
     except BaseException as e:

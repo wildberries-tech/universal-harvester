@@ -320,7 +320,7 @@ def main():
                 access_token = keycloak_openid.token(
                     grant_type='authorization_code',#'authorization_code',
                     code=code,
-                    redirect_uri=f"{current_state["itself_link"]}login/callback"
+                    redirect_uri=f"{current_state['itself_link']}login/callback"
                 )
 
                 new_session_id = str(uuid.uuid4())
@@ -433,7 +433,7 @@ def main():
         return StreamingResponse(
             api_scenario_launch_page_result[3]["buffer"],
             media_type=api_scenario_launch_page_result[3]["media_type"],
-            headers={"Content-Disposition": f"attachment; filename={api_scenario_launch_page_result[3]["filename"]}"})
+            headers={"Content-Disposition": f"attachment; filename={api_scenario_launch_page_result[3]['filename']}"})
     
     ########################################
     # запуск

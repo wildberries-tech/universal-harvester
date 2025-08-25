@@ -92,7 +92,7 @@ async def main():
         current_state)
     if db_update_task_status_result[0] == False:
         logger_log(syslog.LOG_CRIT, get_log_message(
-            f"Status updating error for {current_state["target_id"]}, actual status is {status_code} / {currentTimestamp()}", 
+            f"Status updating error for {current_state['target_id']}, actual status is {status_code} / {currentTimestamp()}",
             currentFuncName(), current_state))
     
     ##############################################
@@ -448,7 +448,7 @@ async def main():
         current_state)
     if db_update_task_status_result[0] == False:
         logger_log(syslog.LOG_CRIT, get_log_message(
-            f"Status updating error for {current_state["target_id"]}, actual status is {status_code} / {currentTimestamp()}", 
+            f"Status updating error for {current_state['target_id']}, actual status is {status_code} / {currentTimestamp()}",
             currentFuncName(), current_state))
     ##########################################
     # проверяем зависимости и восстанавливаем область видимости
@@ -645,7 +645,7 @@ async def main():
     ##################################################
 
     if current_source["type"] not in ENGINE_SOURCES_AND_FUNCTIONS_MAP:
-        message = f"Тип источкика {current_source["type"]} отсутствует в ENGINE_SOURCES_AND_FUNCTIONS_MAP"
+        message = f"Тип источкика {current_source['type']} отсутствует в ENGINE_SOURCES_AND_FUNCTIONS_MAP"
         stop_engine_with_scenario_history(
                         syslog.LOG_ERR,
                         message, 
@@ -659,7 +659,7 @@ async def main():
                         current_state)
         return
     if step["source_function"] not in ENGINE_SOURCES_AND_FUNCTIONS_MAP[current_source["type"]]["functions"]:
-        message = f"Функция шага {step["source_function"]} отсутствует в ENGINE_SOURCES_AND_FUNCTIONS_MAP[{current_source["type"]}] функциях"
+        message = f"Функция шага {step['source_function']} отсутствует в ENGINE_SOURCES_AND_FUNCTIONS_MAP[{current_source['type']}] функциях"
         stop_engine_with_scenario_history(
                         syslog.LOG_ERR,
                         message, 
@@ -694,7 +694,7 @@ async def main():
         current_state)
     if db_update_task_status_result[0] == False:
         logger_log(syslog.LOG_CRIT, get_log_message(
-            f"Status updating error for {current_state["target_id"]}, actual status is {status_code} / {currentTimestamp()}", 
+            f"Status updating error for {current_state['target_id']}, actual status is {status_code} / {currentTimestamp()}",
             currentFuncName(), current_state))
     ####################################  
     # проверяем очередь параллелелизма
@@ -743,7 +743,7 @@ async def main():
         current_state)
     if db_update_task_status_result[0] == False:
         logger_log(syslog.LOG_CRIT, get_log_message(
-            f"Status updating error for {current_state["target_id"]}, actual status is {status_code} / {currentTimestamp()}", 
+            f"Status updating error for {current_state['target_id']}, actual status is {status_code} / {currentTimestamp()}",
             currentFuncName(), current_state))
     ###################################################
     # исполнение / apply генерация параметров и исполнение
@@ -816,7 +816,7 @@ async def main():
         for parameter in step["apply"]["target_parameters"]:
             for i, data_node in enumerate(applied_data):
                 if parameter["column_name"] not in data_node:
-                    message = f"Столбец {parameter["column_name"]} отсутствует в строке {i} применяемых (apply) данных {target_data} для шага {step_name}"
+                    message = f"Столбец {parameter['column_name']} отсутствует в строке {i} применяемых (apply) данных {target_data} для шага {step_name}"
                     stop_engine_with_scenario_history(
                         syslog.LOG_ERR,
                         message, 
@@ -1088,7 +1088,7 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
 
         write_step_to_storage_result = write_step_to_storage(stored_data, current_state)
         if write_step_to_storage_result[0] == False:
-            message = f"Ошибка записи результата шага в хранилище task {current_state["target_id"]}"
+            message = f"Ошибка записи результата шага в хранилище task {current_state['target_id']}"
             logger_log(syslog.LOG_ERR, get_log_message(message, currentFuncName(),current_state))
             task_log_message = message
             status_code = -1
@@ -1107,14 +1107,14 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
             current_state)
         if db_update_task_status_result[0] == False:
             logger_log(syslog.LOG_CRIT, get_log_message(
-                f"Status updating error for {current_state["target_id"]}, actual status is {status_code} / {currentTimestamp()}", 
+                f"Status updating error for {current_state['target_id']}, actual status is {status_code} / {currentTimestamp()}",
                 currentFuncName(), current_state))
 
         # получаем параметры нотификации
         # username есть в current_state
         fetch_user_data_result = fetch_user_data(current_state["username"], current_state)
         if fetch_user_data_result[0] == False:
-            logger_log(syslog.LOG_ERR, get_log_message(f"Ошибка получения данных пользователя {current_state["username"]}", currentFuncName(), current_state))
+            logger_log(syslog.LOG_ERR, get_log_message(f"Ошибка получения данных пользователя {current_state['username']}", currentFuncName(), current_state))
             return
                 
         current_user_json = fetch_user_data_result[3]["json"]
@@ -1134,7 +1134,7 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
             # получаем актуальный список тасок из БД
             db_get_tasks_by_scenario_id_result = db_get_tasks_by_scenario_id({"in_scenario":scenario_session_id} ,current_state)
             if db_get_tasks_by_scenario_id_result[0] == False:
-                logger_log(syslog.LOG_ERR, get_log_message(f"Ошибка получения тасок по session_id для {current_state["username"]}", currentFuncName(), current_state))
+                logger_log(syslog.LOG_ERR, get_log_message(f"Ошибка получения тасок по session_id для {current_state['username']}", currentFuncName(), current_state))
                 return
                         
             scenario_tasks = db_get_tasks_by_scenario_id_result[3]
@@ -1155,7 +1155,7 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
                 update_scenario_history_line_result = update_scenario_history_line(status_code, status, scenario_session_id, current_state)
                 if update_scenario_history_line_result[0] == False:
                     logger_log(syslog.LOG_CRIT, get_log_message(
-                        f"Ошибка обновления статуса сессии сценария {current_state["target_id"]}, должен быть статус {status_code} ({status}) от {currentTimestamp()}", 
+                        f"Ошибка обновления статуса сессии сценария {current_state['target_id']}, должен быть статус {status_code} ({status}) от {currentTimestamp()}",
                         currentFuncName(), current_state))
 
         if "notify" in current_user_json and need_scenario_notify == True and last_step == True:
@@ -1163,7 +1163,7 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
                 get_scenario_history_line_result = get_scenario_history_line(scenario_session_id, current_state)
                 if get_scenario_history_line_result[0] == False:
                     logger_log(syslog.LOG_CRIT, get_log_message(
-                        f"Ошибка получения истории сценария {scenario_session_id} в task {current_state["target_id"]}", 
+                        f"Ошибка получения истории сценария {scenario_session_id} в task {current_state['target_id']}",
                         currentFuncName(), current_state))
                     scenario_parameters = {"error":f"Ошибка получения параметров сценария: {get_scenario_history_line_result[1]}"}
                 else:
@@ -1172,11 +1172,11 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
             notify_text = "Dummy notify text"
             if scenario_session_id == "Null":
                 if status_code == 1:
-                    notify_text = f"Шаг {current_state["target_id"]} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} завершён успешно."
+                    notify_text = f"Шаг {current_state['target_id']} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} завершён успешно."
                 if status_code < 0:
-                    notify_text = f"Шаг {current_state["target_id"]} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} завершён с ошибкой: {status}."
+                    notify_text = f"Шаг {current_state['target_id']} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} завершён с ошибкой: {status}."
                 if status_code == 0 or status_code > 1:
-                    notify_text = f"Шаг {current_state["target_id"]} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} находится в работе."
+                    notify_text = f"Шаг {current_state['target_id']} с параметрами {json.dumps(parameters, indent=2, ensure_ascii=False)} находится в работе."
             else:
                 base_link = current_state['itself_link'] + urllib.parse.quote(f"result/{scenario_session_id}")
                 if status_code == 1:
@@ -1194,7 +1194,7 @@ def stop_engine_with_scenario_history(log_level, task_log_message: str, result: 
                 notify_telegram_proc(current_user_json["notify"]["telegram"], notify_text, current_state)
 
     except BaseException as e:
-        error_message = f"fail: {str(e)}, actual status of task {current_state["target_id"]} is {status_code} ({status})"
+        error_message = f"fail: {str(e)}, actual status of task {current_state['target_id']} is {status_code} ({status})"
         logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
         return False, error_message, currentFuncName(), None
 
