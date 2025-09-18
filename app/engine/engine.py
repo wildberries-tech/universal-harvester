@@ -30,7 +30,7 @@ from app.engine.sources.dns import execute_dns_resolve
 from app.engine.sources.mysql import execute_mysql
 from app.engine.sources.manticoresearch import execute_manticoresearch_sql
 from app.engine.sources.duckdb import execute_duckdb
-from app.engine.sources.universal_harvester import execute_local_scenario
+from app.engine.sources.universal_harvester import execute_local_scenario, execute_get_static_data
 
 ENGINE_SOURCES_AND_FUNCTIONS_MAP = {
     "elastic":{
@@ -702,6 +702,16 @@ ENGINE_SOURCES_AND_FUNCTIONS_MAP = {
                 },
                 "functions":{
                     "query": execute_local_scenario,
+                    #"converter":lambda: None
+                }
+            },
+            "get_static_data":{
+                "required":{
+                    "static_data_name":"dict",
+                    "limit":1000000
+                },
+                "functions":{
+                    "query": execute_get_static_data,
                     #"converter":lambda: None
                 }
             }

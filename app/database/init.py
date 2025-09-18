@@ -127,6 +127,17 @@ db_init_steps = [
                 );"""
     },
     {
+        "table":"static_data",
+        "query":"""CREATE TABLE IF NOT EXISTS static_data
+                (
+                    name TEXT, /*имя данных*/
+                    timestamp TEXT,  /*метка времени загрузки данных*/
+                    owner TEXT, /*владелец данных (кто загрузил)*/
+                    comment TEXT, /*владелец данных (кто загрузил)*/
+                    json TEXT /*payload, сами данные, построчно, в виде json*/
+                );"""
+    },
+    {
         "table":"tasks_clear",
         "query":"""UPDATE tasks SET status_code=-99 WHERE status_code > 1;"""
     },

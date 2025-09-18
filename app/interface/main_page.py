@@ -11,6 +11,7 @@ from app.interface.main_page_blocks.steps import draw_steps
 from app.interface.main_page_blocks.tasks import draw_tasks
 from app.interface.main_page_blocks.scenarios import draw_scenarios
 from app.interface.main_page_blocks.scenario_editor import draw_scenario_editor
+from app.interface.main_page_blocks.static_data import draw_static_data
 
 def main_page(keycloak_openid, current_state):
     logger_log(syslog.LOG_DEBUG, get_log_message("Main page opened", currentFuncName(), current_state))
@@ -58,6 +59,7 @@ def main_page(keycloak_openid, current_state):
             ("Scenarios", "Сценарии выполнения", 'rocket_launch', lambda: draw_scenarios(interface_container, current_state)),
             ("Scenarios editor", "Редактор сценариев", 'design_services', lambda: draw_scenario_editor(interface_container, current_state)), 
             ("AI integration", "Интеграция с ИИ помощниками", 'psychology', None),
+            ("Static data", "Работа с предзагруженными данными (статичные данные-словари)", 'dataset_linked', lambda: draw_static_data(interface_container, current_state)),
             ("Scheduler", "Планировщик задач", 'schedule', None),
             ("Logout", "Выход", 'logout', logout)
         ]

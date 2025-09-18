@@ -4,6 +4,7 @@ import pandas
 import syslog
 import json
 from app.logging import currentTimestamp, get_log_message, logger_log, currentFuncName
+from app.database.static_data import db_get_static_data_by_name
 
 
 def execute_local_scenario(data_map, source, query, step, parameters, current_state):
@@ -76,6 +77,30 @@ def execute_local_scenario(data_map, source, query, step, parameters, current_st
         logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
         return False, error_message, currentFuncName(), []
 
+
+    except BaseException as e:
+        error_message = f"universal harvester local scenario execute fail: {str(e)}"
+        logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
+        return False, error_message, currentFuncName(), []
+    
+def execute_get_static_data(data_map, source, query, step, parameters, current_state):
+    # просто извлекаем данные из словаря в рамках шага
+    try:
+        static_data_name = query["static_data_name"]
+        limit= query["limit"]
+
+        ##############################################
+        # получение статичных данных из БД харвестера
+        ##############################################
+        db_get_static_data_by_name_result = db_get_static_data_by_name(static_data_name, limit, current_state)
+        if not db_get_static_data_by_name_result[0]:
+            error_message = f"{db_get_static_data_by_name_result[2]} error: {db_get_static_data_by_name_result[1]}"
+            logger_log(syslog.LOG_ERR, get_log_message(error_message, currentFuncName(), current_state))
+            return False, error_message, currentFuncName(), []
+        
+        current_static_data_payload = db_get_static_data_by_name_result[3]
+
+        return True, "OK", currentFuncName(), current_static_data_payload
 
     except BaseException as e:
         error_message = f"universal harvester local scenario execute fail: {str(e)}"
