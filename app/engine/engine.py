@@ -890,11 +890,11 @@ def process_injections(node, parameters, current_state):
                 #print(node_string)
                 if injection_type == "s": #string вставляется как есть без впопросов и проблем
                     node_string = node_string[:injection_position] + str(value) + node_string[injection_end_position:]
-                    current_next_shift = len(value) - (injection_end_position - injection_position)
+                    current_next_shift = len(str(value)) - (injection_end_position - injection_position)
                     next_change_shift = next_change_shift + current_next_shift
                 elif injection_type == "x": #x вставляет строку без кавычек, то есть это прямая инъекция, что может быть не совсем безопасно
                     node_string = node_string[:injection_position-quotation_mark_shift] + str(value) + node_string[injection_end_position+quotation_mark_shift:]
-                    current_next_shift = len(value) - (injection_end_position - injection_position)
+                    current_next_shift = len(str(value)) - (injection_end_position - injection_position)
                     next_change_shift = next_change_shift + current_next_shift
                 elif injection_type == "i":
                     input_value = f"{value}"
