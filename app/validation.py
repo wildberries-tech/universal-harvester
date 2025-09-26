@@ -588,7 +588,7 @@ def validate_key_fields(key_list: list, system: str, account: str, key: str, com
 def validate_comment(comment: str, current_state: Dict) -> Tuple[bool, str, str, None]:
     try:
         if check_regex_rule(comment, REGEX_COMMENT_RULE) == False:
-            error_message = f"wrong account"
+            error_message = f"wrong comment"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
             return False, error_message, currentFuncName(), None
         
