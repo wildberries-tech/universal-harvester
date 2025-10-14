@@ -94,9 +94,7 @@ pycurl==7.45.6
 pydantic==2.10.6
 pydantic_core==2.27.2
 Pygments==2.19.1
-pyinstaller==6.12.0
-pyinstaller-hooks-contrib==2025.2
-pymssql==2.3.4
+pymssql==2.3.8
 pyotp==2.9.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
