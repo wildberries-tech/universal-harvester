@@ -330,12 +330,14 @@ async def main():
     if DEBUG: print("\ninput_parameter_validator_result", input_parameter_validator_result,"\n")
 
     ######################################
-    # добавление блока apply, если он был переопределён сценарием
+    # добавление/изменение блоков apply и generate_parameters, если они были переопределёны сценарием
     ######################################
     if "steps" in scenario:
         if len(scenario["steps"]) > step_in_scenario_num: # для случая отладочного запуска шага без сценария
             if "apply_replacement" in scenario["steps"][step_in_scenario_num]:
                 step["apply"] = scenario["steps"][step_in_scenario_num]["apply_replacement"]
+            if "generate_parameters_replacement" in scenario["steps"][step_in_scenario_num]:
+                step["generate_parameters"] = scenario["steps"][step_in_scenario_num]["generate_parameters_replacement"]
 
     ######################################
     # генерация параметров
@@ -680,7 +682,7 @@ async def main():
         converter_exists = True
 
     ########################################
-    # обновляем статус таски как ожидание зависимостей
+    # обновляем статус таски как ожидание очереди исполнения
     #######################################
     status_code = 4
     db_update_task_status_result = db_update_task_status(
