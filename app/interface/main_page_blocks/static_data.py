@@ -181,7 +181,7 @@ async def draw_static_data(interface_container: ui.card, current_state: dict) ->
                                 logger_log(syslog.LOG_ERR, get_log_message(validate_comment_result[1], currentFuncName(), current_state))
                                 return
                             
-                            # валидация введённого в comment
+                            # валидация введённого в имя данных
                             validate_itemname_result = validate_itemname(static_data_name_input.value, current_state)
                             if validate_itemname_result[0] == False:
                                 ui.notify(f"Ошибка валидации имени данных: {validate_itemname_result[1]}", type="negative")
