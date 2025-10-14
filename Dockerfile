@@ -1,5 +1,5 @@
 # start by pulling the python image
-FROM --platform=linux/amd64 python
+FROM --platform=linux/amd64 python:3.13
 # Установка временной зоны и сертификатов
 RUN apt-get update && apt-get install -y \
     ca-certificates \
