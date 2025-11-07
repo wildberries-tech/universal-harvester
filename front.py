@@ -4,8 +4,8 @@ import asyncio
 #import nest_asyncio
 #nest_asyncio.apply()
 
-from fastapi import Request, Response, HTTPException
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi import Request, Response, HTTPException, BackgroundTasks
+from fastapi.responses import RedirectResponse, StreamingResponse, PlainTextResponse, FileResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from nicegui import app, ui, Client, run
 
@@ -244,7 +244,7 @@ def main():
     ########################################
     # аутентификация
     ########################################
-    unrestricted_page_routes_regex = ['/login', '/api/scenario/[^/]+/parameters/[^/]+/[^/]+']
+    unrestricted_page_routes_regex = ['/login', '/api/scenario/[^/]+/parameters/[^/]+/[^/]+', '/api/scenarioinline/[^/]+/parameters/[^/]+/[^/]+']
     class AuthMiddleware(BaseHTTPMiddleware):
         """This middleware restricts access to all NiceGUI pages.
 
@@ -400,7 +400,7 @@ def main():
         ui.page_title(f'{current_state["app_name"]}')
         await create_fullscreen_scenario_result_page(session_id, output_type, current_state)
     ########################################
-    # страница api запуска сценария curl
+    # страница api запуска сценария curl (скачивание файла)
     ########################################
     @app.get("/api/scenario/{scenario_name}/parameters/{parameters}/{output_type}", response_class=StreamingResponse, response_model=None)
     async def download_report(scenario_name: str, parameters: str, output_type: str, request: Request):
@@ -434,6 +434,45 @@ def main():
             api_scenario_launch_page_result[3]["buffer"],
             media_type=api_scenario_launch_page_result[3]["media_type"],
             headers={"Content-Disposition": f"attachment; filename={api_scenario_launch_page_result[3]['filename']}"})
+    
+    ########################################
+    # страница api запуска сценария curl (PlainText)
+    ########################################
+    @app.get("/api/scenarioinline/{scenario_name}/parameters/{parameters}/{output_type}",response_class=PlainTextResponse)
+    async def download_report_inline(scenario_name: str, parameters: str, output_type: str, request: Request, background_tasks: BackgroundTasks):
+        client_ip = request.client.host#client.environ['asgi.scope']['client'][0]
+        client_port = request.client.port#client.environ['asgi.scope']['client'][1]
+        CURRENT_SESSION_ID = str(uuid.uuid4())
+        CURRENT_USERNAME = "api_user"
+        current_state = {
+            "db_conf":DB_CONF,
+            "app_name":APP_NAME,
+            "app_version":APP_VERSION,
+            "main_session_id":main_session_id,
+            "user_session_id":CURRENT_SESSION_ID,
+            "client_ip_address":client_ip,
+            "client_port":client_port,
+            "username":CURRENT_USERNAME, 
+            "master_key": MASTER_KEY,
+            "codemirror_theme":'monokai',
+            "aggrid_theme":'ag-theme-balham-dark',
+            "engine_path": ENGINE_PATH,
+            "storage_path":STORAGE_PATH,
+            "itself_link":ITSELF_LINK,
+            # "keycloak_flag":keycloak_flag,
+            # "keycloak_openid":keycloak_openid
+        }
+        api_scenario_launch_page_result = await run.cpu_bound(api_scenario_launch_page, dict(request.headers), scenario_name, parameters, output_type, current_state)
+        if api_scenario_launch_page_result[0] == False:
+            raise HTTPException(status_code=api_scenario_launch_page_result[3]["response_code"], detail=api_scenario_launch_page_result[1])
+        
+        # закрытие буфера после отработки запроса
+        background_tasks.add_task(api_scenario_launch_page_result[3]["buffer"].close)
+
+        return PlainTextResponse(
+            api_scenario_launch_page_result[3]["buffer"].getvalue(),
+            media_type=api_scenario_launch_page_result[3]["media_type"],
+            headers={"Content-Disposition": f"inline; filename={api_scenario_launch_page_result[3]['filename']}"})
     
     ########################################
     # запуск
