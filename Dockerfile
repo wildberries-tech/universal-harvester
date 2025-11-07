@@ -24,18 +24,19 @@ RUN mkdir -p /srv/storage
 
 # nicegui storage change
 #ENV NICEGUI_STORAGE_PATH=/srv/storage/nicegui_storage
-
+RUN mkdir -p /app/teleport
+WORKDIR /app/teleport
 #install teleport tsh 12
 RUN curl -O https://cdn.teleport.dev/teleport-v12.4.9-linux-amd64-bin.tar.gz
-RUN tar -xzf teleport-v12.4.9-linux-amd64-bin.tar.gz
-RUN cd teleport
-RUN ./teleport/install
+RUN tar -xzf /app/teleport/teleport-v12.4.9-linux-amd64-bin.tar.gz
+RUN mv teleport teleport_12
+RUN rm /app/teleport/teleport-v12.4.9-linux-amd64-bin.tar.gz
 
-# WORKDIR /app/teleport
-# RUN tar -xzf teleport-v12.4.9-linux-amd64-bin.tar.gz
-# RUN cd teleport
-# RUN ./teleport/install
-
+#install teleport tsh 17
+RUN curl -O https://cdn.teleport.dev/teleport-v17.7.7-linux-amd64-bin.tar.gz
+RUN tar -xzf /app/teleport/teleport-v17.7.7-linux-amd64-bin.tar.gz
+RUN mv teleport teleport_17
+RUN rm /app/teleport/teleport-v17.7.7-linux-amd64-bin.tar.gz
 
 # configure the container to run in an executed manner
 WORKDIR /app

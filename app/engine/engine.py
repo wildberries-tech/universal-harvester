@@ -449,6 +449,7 @@ ENGINE_SOURCES_AND_FUNCTIONS_MAP = {
         }, 
         "required":{
             "host":"teleport.example.ru",
+            "tsh_path":"/usr/local/bin/tsh",
             #"key":[{"system":"teleport", "account":"foo.bar"},{"system":"teleport", "account":"foo.bar_TOTP"}],
             "max_threads":10
         }, 

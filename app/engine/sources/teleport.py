@@ -12,18 +12,18 @@ from app.engine.cache import get_data_from_cache
 
 # функции интеграции с телепортом
 # реализовано только подключение с использованием OTP
-def teleport_auth(teleport_host, SECRET_TELEPORT, ACCOUNT_TELEPORT, SECRET_TOTP, current_state):
+def teleport_auth(teleport_host, tsh_path, SECRET_TELEPORT, ACCOUNT_TELEPORT, SECRET_TOTP, current_state):
     logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
     subprocess.run(
-        f"tsh logout --proxy={teleport_host} --user={ACCOUNT_TELEPORT}".split()
+        f"{tsh_path} logout --proxy={teleport_host} --user={ACCOUNT_TELEPORT}".split()
     )
     p = pexpect.spawn(
-        f"tsh login --proxy={teleport_host} --user {ACCOUNT_TELEPORT} --mfa-mode otp --auth local"
+        f"{tsh_path} login --proxy={teleport_host} --user {ACCOUNT_TELEPORT} --mfa-mode otp --auth local"
     )
 
     try:
         expected = f"Enter password for Teleport user {ACCOUNT_TELEPORT}:"
-        print("Expecting '{}'", expected)
+        #print("Expecting '{}'", expected)
         p.expect_exact(expected)
     except pexpect.exceptions.TIMEOUT as e:
         error_message = f"Not authorized and could not get password prompt; {str(e)}"
@@ -60,10 +60,10 @@ def teleport_auth(teleport_host, SECRET_TELEPORT, ACCOUNT_TELEPORT, SECRET_TOTP,
     logger_log(syslog.LOG_DEBUG, get_log_message("done", currentFuncName(), current_state))
     return 1
 
-def teleport_get_hosts(current_state):
+def teleport_get_hosts(tsh_path, current_state):
     try:
         logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
-        result = subprocess.run(['/usr/local/bin/tsh', 'ls', '--format=json'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        result = subprocess.run([tsh_path, 'ls', '--format=json'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         data = json.loads(result)
         data = pandas.json_normalize(data).to_dict('records')
         logger_log(syslog.LOG_DEBUG, get_log_message("done", currentFuncName(), current_state))
@@ -96,6 +96,7 @@ def execute_function_get_hosts_teleport(data_map, source, query, step, parameter
         try:
             teleport_login_status = teleport_auth(
                 host, 
+                source["tsh_path"],
                 SECRET_TELEPORT,
                 ACCOUNT_TELEPORT, 
                 SECRET_TOTP, current_state
@@ -111,7 +112,7 @@ def execute_function_get_hosts_teleport(data_map, source, query, step, parameter
             return False, error_message, currentFuncName(), []
         
         try:
-            current_data = teleport_get_hosts(current_state)
+            current_data = teleport_get_hosts(source["tsh_path"], current_state)
         except BaseException as e:
             error_message = f"Any problem with teleport getting hosts data"
             logger_log(syslog.LOG_ERR, get_log_message(f"{error_message}", currentFuncName(), current_state))
