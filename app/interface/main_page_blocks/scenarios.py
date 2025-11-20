@@ -241,6 +241,7 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                         grid.on("selectionChanged", update_scenario_actions)
 
                         # История выполнения
+                        checkbox_subscenarios = ui.checkbox(text='Show subscenarios')
                         history_container = ui.column().classes("w-full mt-4")
                         history_grid = None
                         def refresh_history():
@@ -252,18 +253,46 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                                 return
                             with history_container:
                                 ui.label("Execution History (click for get results)").classes("text-h6 mb-2")
-                                history_data = [
-                                    {
-                                        "scenario_name": h["scenario_name"],
-                                        "scenario_parameters": json.dumps(h["json"]["parameters"], indent = 2, ensure_ascii=False),
-                                        "username": h["username"],
-                                        "status_code": h["status_code"],
-                                        "status": h["status"],
-                                        "timestamp_start": h["timestamp_start"],
-                                        "timestamp_stop": h["timestamp_stop"],
-                                        "session_id": h["session_id"]
-                                    } for h in history
-                                ]
+                                history_data = []
+                                for h in history:
+                                    if checkbox_subscenarios.value:
+                                        history_data.append({
+                                            "scenario_name": h["scenario_name"],
+                                            "scenario_parameters": json.dumps(h["json"]["parameters"], indent = 2, ensure_ascii=False),
+                                            "username": h["username"],
+                                            "status_code": h["status_code"],
+                                            "status": h["status"],
+                                            "timestamp_start": h["timestamp_start"],
+                                            "timestamp_stop": h["timestamp_stop"],
+                                            "session_id": h["session_id"]
+                                        })
+                                    else:
+                                        """если чекбокс Show subscenarios отключён, то мы проверяем, является ли строка сценария
+                                        вспомогательным запуском. Для вспомогательного запуска id является составным
+                                        step_id:subscenario_id"""
+                                        if not re.search(r"^[0-9a-f]{8}\-[0-9a-f]{4}\-4[0-9a-f]{3}\-[89ab][0-9a-f]{3}\-[0-9a-f]{12}:",h["session_id"]):
+                                                history_data.append({
+                                                "scenario_name": h["scenario_name"],
+                                                "scenario_parameters": json.dumps(h["json"]["parameters"], indent = 2, ensure_ascii=False),
+                                                "username": h["username"],
+                                                "status_code": h["status_code"],
+                                                "status": h["status"],
+                                                "timestamp_start": h["timestamp_start"],
+                                                "timestamp_stop": h["timestamp_stop"],
+                                                "session_id": h["session_id"]
+                                            })
+                                # history_data = [
+                                #     {
+                                #         "scenario_name": h["scenario_name"],
+                                #         "scenario_parameters": json.dumps(h["json"]["parameters"], indent = 2, ensure_ascii=False),
+                                #         "username": h["username"],
+                                #         "status_code": h["status_code"],
+                                #         "status": h["status"],
+                                #         "timestamp_start": h["timestamp_start"],
+                                #         "timestamp_stop": h["timestamp_stop"],
+                                #         "session_id": h["session_id"]
+                                #     } for h in history
+                                # ]
                                 history_grid = ui.aggrid({
                                         "defaultColDef": {
                                             "wrapText": True,
@@ -281,6 +310,7 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                                     ],
                                     "rowData": history_data,
                                     "rowSelection": "single",
+                                    "enableCellTextSelection" : True,
                                     "pagination": True,
                                     "paginationPageSize": 10,
                                     "domLayout": "normal",
@@ -303,7 +333,8 @@ def draw_scenarios(interface_container: ui.card, current_state: dict) -> Tuple[b
                                     
 
                                 history_grid.on("selectionChanged", history_grid_click)
-
+                        
+                        checkbox_subscenarios.on_value_change(refresh_history)
 
                         refresh_history()
 
