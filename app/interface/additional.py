@@ -33,17 +33,31 @@ def prepare_aggrid_for_result(result: List[Dict]) -> Dict:
     transformed_result = []
     for item in result:
         transformed_item = {}
-        for k, v in item.items():
+        for key, value in item.items():
             #new_key = k.replace(".", "_")  # Заменяем точки на подчёркивания
-            new_key = k
-            transformed_item[new_key] = "" if v is None else v
+            new_key = key
+            """Здесь необходимо преобразовать данные для отображения
+            Null/None не отображается
+            dict или list отображается как [object Object]"""
+            if value is None:
+                transformed_item[new_key] = "" 
+            elif isinstance(value, list) is True or isinstance(value, dict) is True:
+                transformed_item[new_key] = json.dumps(value, indent=0)
+            else:
+                transformed_item[new_key] = value
+
         transformed_result.append(transformed_item)
 
-    column_defs = [
-        #{"headerName": k.replace("_", "."), "field": k, "filter": True, "sortable": True, "minWidth": 150}
-        {"headerName": k, "field": k, "filter": True, "sortable": True, "minWidth": 150}
-        for k in transformed_result[0].keys()
-    ]
+    """Основой для заголовков является первая строка данных.
+        При объединении данных столбцы, которых нет в первой строке,
+        отображаться не будут. Для исправления необходимо сделать полный пробег
+        по данным для определения столбцов"""
+    # column_defs = [
+    #     {"headerName": k, "field": k, "filter": True, "sortable": True, "minWidth": 150} for k in transformed_result[0].keys()
+    # ]
+    current_columns = pd.DataFrame(transformed_result)
+    column_defs = [{"headerName": column, "field": column, "filter": True, "sortable": True, "minWidth": 150} for column in current_columns]
+
     return {
         "defaultColDef": {
             "wrapText": True,
