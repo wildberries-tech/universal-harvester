@@ -393,7 +393,10 @@ ENGINE_SOURCES_AND_FUNCTIONS_MAP = {
     "gitlab":{
         "functions":{
             "get_namespace_owner":{
-                "required":{},
+                "required":{
+                    "namespace":"foobar",
+                    "project_id":123
+                },
                 "functions":{
                     "query": execute_gitlab_namespace_owner_request,
                     #"converter": lambda: None
