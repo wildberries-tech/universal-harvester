@@ -5,13 +5,15 @@ import syslog
 from app.logging import currentTimestamp, get_log_message, logger_log, currentFuncName
 
 def execute_gitlab_namespace_owner_request(data_map, source, query, step, parameters, current_state):
-    try:
+    try: #custom function
+        # ищем в проекте файлы с искомым неймспейсом
+        # в файлах ищем строки с упоминанием owner
         logger_log(syslog.LOG_DEBUG, get_log_message("start", currentFuncName(), current_state))
 
-        namespace = parameters["namespace"]
+        namespace = query["namespace"]
         token_gitlab = source["key"]["value"]
         gitlab_url = source["url"]
-        project_id = parameters["project_id"]
+        project_id = query["project_id"]
 
         response = requests.get(
             #https://docs.gitlab.com/api/namespaces/ ???
@@ -27,7 +29,6 @@ def execute_gitlab_namespace_owner_request(data_map, source, query, step, parame
 
         output_result = []
 
-        #print(response.json()) #DEBUG!!!
         results = response.json()
         for result in results:
             if "owner" in result['data']:
