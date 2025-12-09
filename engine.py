@@ -330,7 +330,7 @@ async def main():
     if DEBUG: print("\ninput_parameter_validator_result", input_parameter_validator_result,"\n")
 
     ######################################
-    # добавление/изменение блоков apply и generate_parameters, если они были переопределёны сценарием
+    # добавление/изменение блоков apply, generate_parameters, query, если они были переопределёны сценарием
     ######################################
     if "steps" in scenario:
         if len(scenario["steps"]) > step_in_scenario_num: # для случая отладочного запуска шага без сценария
@@ -338,6 +338,8 @@ async def main():
                 step["apply"] = scenario["steps"][step_in_scenario_num]["apply_replacement"]
             if "generate_parameters_replacement" in scenario["steps"][step_in_scenario_num]:
                 step["generate_parameters"] = scenario["steps"][step_in_scenario_num]["generate_parameters_replacement"]
+            if "query_replacement" in scenario["steps"][step_in_scenario_num]:
+                step["query"] = scenario["steps"][step_in_scenario_num]["query_replacement"]
 
     ######################################
     # генерация параметров

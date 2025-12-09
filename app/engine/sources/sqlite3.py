@@ -65,7 +65,7 @@ def datetime_to_timestamp(timestamp_string, format):
     
 def execute_sqlite3(data_map, source, query, step, parameters, current_state):
     # поскольку мы используем inmemory, то клиента к системе проверять не нужно
-    try:  
+    try: 
         # создаем экземпляр БД
         db = sqlite3.connect(':memory:')
 
