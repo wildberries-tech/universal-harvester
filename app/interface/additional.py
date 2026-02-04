@@ -408,6 +408,8 @@ def get_mermaid_content_for_steps(steps_list: List, scenario: dict, current_stat
         if "steps" in scenario:
             if "apply_replacement" in scenario["steps"][i]:
                 step_json["apply"] = scenario["steps"][i]["apply_replacement"]
+            if "query_replacement" in scenario["steps"][i]:
+                step_json["query"] = scenario["steps"][i]["query_replacement"]
 
         ######################################
         # инпут-инъектирование
