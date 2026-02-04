@@ -2,15 +2,8 @@ import datetime
 import json
 import requests
 from zoneinfo import ZoneInfo
-#import httpx
-
-#import pycurl
-#from io import BytesIO, StringIO
-from urllib.parse import urlencode
-
 import syslog
-from app.logging import currentTimestamp, get_log_message, logger_log, currentFuncName
-
+from app.logging import get_log_message, logger_log, currentFuncName
 from app.engine.cache import get_data_from_cache
 
 
@@ -67,7 +60,6 @@ def execute_grafana_export_table_requests(data_map, source, query, step, paramet
             logger_log(syslog.LOG_DEBUG, get_log_message("done from cache", currentFuncName(), current_state))
             return True, "ОК from cache", currentFuncName(), get_data_from_cache_result[3]
         
-
         TOKEN_GRAFANA = source["key"]["value"]
         headers = {
             'Accept': 'application/json',
@@ -112,14 +104,11 @@ def execute_grafana_export_table_requests(data_map, source, query, step, paramet
 
             data = json.dumps(data)
 
-
             url = source["url"]
             if isinstance(url, tuple):
                 url = url[0]
 
-            
-
-            response = requests.post(url+query["api_path"], headers=headers, data=data)
+            response = requests.post(url+query["api_path"], verify=source["verify"], headers=headers, data=data)
 
             if response.status_code == 200:
                 current_data = current_data + grafana_exported_data_to_dataframe(response.json(), current_state)

@@ -517,6 +517,7 @@ ENGINE_SOURCES_AND_FUNCTIONS_MAP = {
         }, 
         "required":{
             "url":"https://grafana.example.ru",
+            "verify":True,
             #"key":{"system":"foo", "account":"bar"},
             "max_threads":10
         }, 
